@@ -174,8 +174,25 @@ public class UserSimilarityCal {
 			for(UserItemScoreDto o : oItems){
 				oItemsId.add(o.getPesticideId());
 			}
-			System.out.println(ouserId+"....."+oItemsId);
+			//System.out.println(ouserId+"....."+oItemsId);
 			
+			//寻找共同评分项
+			List<Integer> intersectionItemsId = new ArrayList<Integer>();
+			for(int i :cItemsId){
+				for(int j :oItemsId ){
+					if(i == j){
+						//System.out.println(ouserId+"....intemIntersection...."+i);
+						intersectionItemsId.add(i);
+					}
+				}
+			}
+			
+			System.out.println(ouserId+"....."+intersectionItemsId);
+			
+			//根据余弦相似度公式计算目标用户与准近邻用户相似度
+			
+			
+			return intersectionItemsId;
 		}
 		
 		
@@ -185,8 +202,8 @@ public class UserSimilarityCal {
 
 	public static void main(String[] args) {
 		UserSimilarityCal  u = new UserSimilarityCal();
-		List<UserSimilarityDto> limitUserList = u.selectUserSimilarity(1);
-		u.queryItemIntersection(1, limitUserList);
+		List<UserSimilarityDto> limitUserList = u.selectUserSimilarity(2);
+		u.queryItemIntersection(2, limitUserList);
 	}
 	
 	
