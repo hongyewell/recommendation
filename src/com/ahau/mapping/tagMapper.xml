@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ahau.mapping.tagMapper">
+   
+   <!--  根据id查询得到一个user对应的标签列表     -->
+    <select id="getTags" parameterType="int"  resultType="com.ahau.app.entity.Tag">
+       select * from t_tag where id in (select tag_id from t_user_tag where user_id = #{id});
+    </select>
+    
+</mapper>

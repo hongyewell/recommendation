@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ahau.mapping.userMapper">
+    
+    <!--  根据id查询得到一个user对象     -->
+    <select id="getUser" parameterType="int"  resultType="com.ahau.app.entity.User">
+        select * from t_user where id = #{id}
+        <!-- 
+		<where>
+			<if test="id != null">
+				id=#{id}
+			</if>
+		</where>
+		 -->
+    </select>
+
+    <!--  查询其他用户     -->
+    <select id="getOtherUsers" parameterType="int"  resultType="com.ahau.app.entity.User">
+        select * from t_user where id !=#{id}
+    </select>
+    
+    <select id="queryAllUser" resultType="com.ahau.app.entity.User">
+    	select * from t_user
+    </select>
+    
+    <insert id="saveUserSimilarity" parameterType="hashmap">
+		INSERT into t_user_similarity(cuser_id, ouser_id, similarity)
+		VALUES(#{cuserId}, #{ouserId}, #{similarity})
+    </insert>
+    
+    <delete id="deleteUserSimilarity">
+    	 delete from t_user_similarity
+    </delete>
+    
+    <!-- 查询总用户数 -->
+    <select id="queryUserCount" resultType="int">
+    	 select count(*) from t_user
+    </select>
+    
+    <!-- 筛选近邻用户候选集 -->
+    <select id="queryLimitUserList" parameterType="hashmap" resultType="com.ahau.app.dto.UserSimilarityDto">
+    	select cuser_id as cuserId,
+    	ouser_id as ouserId,
+    	similarity
+    	from t_user_similarity 
+    	where cuser_id = #{id} 
+    	order by similarity desc 
+    	limit 0,#{limitUserCount}
+    </select>
+    
+    <!-- 模拟用户评分数据 -->
+    <insert id="insertUserScore" parameterType="hashmap">
+    	insert into t_score(user_id, pesticide_id, grade)
+		values(#{userId}, #{pesticideId}, #{grade});
+    </insert>
+    
+    <!-- 查询某用户已评分项 -->
+    <select id="queryItemIntersection" parameterType="int"  resultType="com.ahau.app.dto.UserItemScoreDto">
+    	SELECT user_id as userId,
+    	pesticide_id as pesticideId,
+    	grade as grade
+		from t_score 
+    	where user_id = #{userId} 
+    	and grade !=0 
+    </select>
+
+    
+</mapper>

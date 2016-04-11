@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ahau.mapping.areaMapper">
+   
+     <!--  根据id查询得到一个user对应的地区     -->
+    <select id="getArea" parameterType="int"  resultType="com.ahau.app.entity.Area">
+        select * from t_area where area_code = (select area_code from t_user_area where user_id = #{id});
+    </select>
+    
+    <select id="queryAreaSimilarity" parameterType="hashmap" resultType="int">
+    	select t.similarity from t_area_similarity t
+		where t.area_code = #{areaCode} and 
+		t.area_other_code = #{areaOtherCode}
+    </select>
+    
+   
+</mapper>

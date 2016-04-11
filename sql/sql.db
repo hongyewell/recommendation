@@ -1,0 +1,94 @@
+# 用户
+create table t_user(
+	id,
+	username,
+);
+
+# 用户相似度
+create t_user_similarity(
+	id,
+	user_id,
+	user_other_id,
+	similarity
+);
+
+
+# 标签
+create table t_tag(
+	id,
+	tag_name
+);
+
+
+
+# 用户关注
+create t_user_tag(
+	id,
+	user_id,
+	tag_id
+);
+
+# 类别
+create t_category(
+	
+);
+
+# 农药
+create t_pesticide(
+	id, 
+	name,
+	brand,	-- 品牌
+	poison,     -- 毒性
+	dosage, 	-- 剂型
+	price,
+	symptoms,	-- 适用病症
+	category_id,
+	season      --使用季节
+);
+
+# 用户对项目的评分
+create t_score(
+	id, 
+	user_id,
+	pesticide_id,
+	grade
+);
+
+# 项目相似度
+create t_pest_similarity(
+	id,
+	pest_id,
+	pest_other_id,
+	similarity
+);
+# 地区编码
+create table t_area(
+	id,
+	area_code,
+	area_name
+);
+
+# 用户所在地区
+create table t_user_area(
+	id,
+	user_id,
+	area_code
+);
+
+
+# 地区相似度
+create table t_area_similarity(
+	id,
+	area_code,
+	area_other_code,
+	similarity
+);
+
+
+
+
+
+
+
+
+
