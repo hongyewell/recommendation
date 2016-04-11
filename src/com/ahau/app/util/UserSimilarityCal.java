@@ -152,47 +152,59 @@ public class UserSimilarityCal {
 	 * 查询当前用户与准近邻用户的共同评分项
 	 */
 	public List<Integer> queryItemIntersection(int currentUserId, List<UserSimilarityDto> limitUserList){
-	
+		
+		//当前用户已评分项
 		List<UserItemScoreDto>  cItems = itemDao.queryItemIntersection(currentUserId);
 		//System.out.println("cItems....."+cItems);
 		
-		//当前用户已评分项
-		List<Integer> cItemsId = new ArrayList<Integer>();
+		
+		/*List<Integer> cItemsId = new ArrayList<Integer>();
 		for(UserItemScoreDto c : cItems){
 			cItemsId.add(c.getPesticideId());
 		}
-		System.out.println("cItemsId....."+cItemsId);
+		System.out.println("cItemsId....."+cItemsId);*/
 		
 		
 		for(UserSimilarityDto u : limitUserList){
 			int ouserId = u.getOuserId();
+			//查询准近邻用户已评分项
 			List<UserItemScoreDto>  oItems = itemDao.queryItemIntersection(ouserId);
 			//System.out.println("oItems....."+oItems);
 			
-			//查询准近邻用户已评分项
-			List<Integer> oItemsId = new ArrayList<Integer>();
+			
+			/*List<Integer> oItemsId = new ArrayList<Integer>();
 			for(UserItemScoreDto o : oItems){
 				oItemsId.add(o.getPesticideId());
-			}
+			}*/
 			//System.out.println(ouserId+"....."+oItemsId);
 			
 			//寻找共同评分项
-			List<Integer> intersectionItemsId = new ArrayList<Integer>();
-			for(int i :cItemsId){
-				for(int j :oItemsId ){
-					if(i == j){
+			//List<UserItemScoreDto> intersectionItemsId = new ArrayList<UserItemScoreDto>();
+			int x = 0;
+			int y = 0;
+			int z = 0;
+			for(UserItemScoreDto i : cItems){
+				for(UserItemScoreDto j :oItems ){
+					if(i.getPesticideId() == j.getPesticideId()){
 						//System.out.println(ouserId+"....intemIntersection...."+i);
-						intersectionItemsId.add(i);
+						//intersectionItemsId.add(i);
+						int iScore = i.getGrade();
+						int jScore = j.getGrade();
+						x += iScore*jScore;
+						y += iScore*iScore;
+						z += jScore*jScore;
+						
+						float result = x/y*z;
 					}
 				}
 			}
 			
-			System.out.println(ouserId+"....."+intersectionItemsId);
+			//System.out.println(ouserId+"....."+intersectionItemsId);
 			
 			//根据余弦相似度公式计算目标用户与准近邻用户相似度
 			
 			
-			return intersectionItemsId;
+			
 		}
 		
 		
