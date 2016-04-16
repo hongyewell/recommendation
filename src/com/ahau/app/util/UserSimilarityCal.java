@@ -1,7 +1,6 @@
 package com.ahau.app.util;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.ahau.app.dao.AreaDao;
@@ -100,7 +99,7 @@ public class UserSimilarityCal {
 			String sim = df.format(tolSimilarity);
 			float simi = Float.valueOf(sim);
 			
-			System.out.println(currentUser.getId() + " --> " + u.getId() + " -->" + df.format(tolSimilarity));
+			//System.out.println(currentUser.getId() + " --> " + u.getId() + " -->" + df.format(tolSimilarity));
 			
 			
 			UserSimilarityDto dto = new UserSimilarityDto(currentUser.getId(), u.getId(), simi);
@@ -151,7 +150,7 @@ public class UserSimilarityCal {
 	/**
 	 * 查询当前用户与准近邻用户的共同评分项
 	 */
-	public List<Integer> queryItemIntersection(int currentUserId, List<UserSimilarityDto> limitUserList){
+	public void queryItemIntersection(int currentUserId, List<UserSimilarityDto> limitUserList){
 		
 		//当前用户已评分项
 		List<UserItemScoreDto>  cItems = itemDao.queryItemIntersection(currentUserId);
@@ -166,6 +165,7 @@ public class UserSimilarityCal {
 		
 		
 		for(UserSimilarityDto u : limitUserList){
+			double result = 0;
 			int ouserId = u.getOuserId();
 			//查询准近邻用户已评分项
 			List<UserItemScoreDto>  oItems = itemDao.queryItemIntersection(ouserId);
@@ -178,37 +178,44 @@ public class UserSimilarityCal {
 			}*/
 			//System.out.println(ouserId+"....."+oItemsId);
 			
-			//寻找共同评分项
+			
 			//List<UserItemScoreDto> intersectionItemsId = new ArrayList<UserItemScoreDto>();
 			int x = 0;
 			int y = 0;
 			int z = 0;
 			for(UserItemScoreDto i : cItems){
 				for(UserItemScoreDto j :oItems ){
+					//寻找共同评分项
 					if(i.getPesticideId() == j.getPesticideId()){
 						//System.out.println(ouserId+"....intemIntersection...."+i);
 						//intersectionItemsId.add(i);
+						
+						//根据余弦相似度公式计算目标用户与准近邻用户相似度
 						int iScore = i.getGrade();
 						int jScore = j.getGrade();
 						x += iScore*jScore;
 						y += iScore*iScore;
 						z += jScore*jScore;
 						
-						float result = x/y*z;
+						double h =  Math.sqrt(y*z);
+						result = x/h;
+						
+						//System.out.println("相似度："+ouserId+"...."+result);
+						
+						//return result;
 					}
 				}
 			}
-			
+			System.out.println("相似度："+ouserId+"...."+result);
 			//System.out.println(ouserId+"....."+intersectionItemsId);
 			
-			//根据余弦相似度公式计算目标用户与准近邻用户相似度
+			
 			
 			
 			
 		}
-		
-		
-		return null;
+
+		//return 0;
 		
 	}
 
